@@ -47,6 +47,14 @@
  import com.arthenica.ffmpegkit.SessionState;
  import com.arthenica.ffmpegkit.Signal;
  import com.arthenica.ffmpegkit.Statistics;
+
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import java.util.HashMap;
+import java.util.Map;
+
  
  import org.json.JSONArray;
  import org.json.JSONException;
@@ -143,6 +151,9 @@
  
      private EventChannel.EventSink eventSink;
      private final FFmpegKitFlutterMethodResultHandler resultHandler;
+
+     private ActivityResultLauncher<Intent> activityResultLauncher;
+
  
      public FFmpegKitFlutterPlugin() {
          this.logsEnabled = new AtomicBoolean(false);
@@ -227,17 +238,7 @@
      }
  
      @Override
-     public void onDetachedFromActivity() {
-         activity = null;
- 
-         if (activityPluginBinding != null) {
-             activityPluginBinding.removeActivityResultListener(this);
-         }
- 
-         activityPluginBinding = null;
- 
-       
- 
+     public void onDetachedFromActivity() {   
          uninit();
          Log.d(LIBRARY_NAME, "FFmpegKitFlutterPlugin detached from activity.");
      }
@@ -701,13 +702,31 @@
          this.context = context;
          this.activity = activity;
      
-         if (activityBinding != null) {
-             // V2 embedding setup for activity listeners.
-             activityBinding.getActivity().getActivityResultRegistry()
-             .register("activity_result", new ActivityResultContracts.StartActivityForResult(), result -> {
-                 handleActivityResult(result.getResultCode(), result.getData());
-             });         }
+         // Register result launcher
+         activityResultLauncher = activityBinding.getActivity().registerForActivityResult(
+             new ActivityResultContracts.StartActivityForResult(),
+             new ActivityResultCallback<ActivityResult>() {
+                 @Override
+                 public void onActivityResult(ActivityResult result) {
+                     if (result.getData() == null) {
+                         return;
+                     }
      
+                     // Retrieve requestCode from pending requests
+                     String key = result.getData().getAction(); // Using Intent action as the key
+                     Integer requestCode = pendingRequests.get(key);
+     
+                     if (requestCode != null) {
+                         // Forward to existing onActivityResult
+                         FFmpegKitFlutterPlugin.this.onActivityResult(requestCode, result.getResultCode(), result.getData());
+                         
+                         // Remove from pending requests after handling
+                         pendingRequests.remove(key);
+                     }
+                 }
+             }
+         );
+               
          Log.d("FFmpegKitFlutterPlugin", "Plugin initialized with context " + context + " and activity " + activity);
      }
      
@@ -1279,7 +1298,12 @@
              if (activity != null) {
                  try {
                      lastInitiatedIntentResult = result;
-                     activity.startActivityForResult(intent, writable ? WRITABLE_REQUEST_CODE : READABLE_REQUEST_CODE);
+                     String key = writable ? "WRITE_DOCUMENT" : "READ_DOCUMENT";
+                     pendingRequests.put(key, writable ? WRITABLE_REQUEST_CODE : READABLE_REQUEST_CODE);
+                     
+                     // Launch the intent using ActivityResultLauncher
+                     activityResultLauncher.launch(intent);
+
                  } catch (final Exception e) {
                      Log.i(LIBRARY_NAME, String.format("Failed to selectDocument using parameters writable: %s, type: %s, title: %s and extra types: %s!", writable, type, title, extraTypes == null ? null : Arrays.toString(extraTypes)), e);
                      resultHandler.errorAsync(result, "SELECT_FAILED", e.getMessage());
