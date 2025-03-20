@@ -266,7 +266,8 @@ import java.util.Map;
          Log.d(LIBRARY_NAME, "FFmpegKitFlutterPlugin stopped listening to events.");
      }
  
-     @Override
+
+ 
      public boolean onActivityResult(final int requestCode, final int resultCode, final Intent data) {
          Log.d(LIBRARY_NAME, String.format("selectDocument completed with requestCode: %d, resultCode: %d, data: %s.", requestCode, resultCode, data == null ? null : data.toString()));
  
@@ -704,7 +705,7 @@ import java.util.Map;
          this.activity = activity;
      
          // Register result launcher
-         activityResultLauncher = flutterPluginBinding.getActivity().getActivityResultRegistry().register(
+         activityResultLauncher = activityPluginBinding.getActivity().getActivityResultRegistry().register(
              "activity_result", 
              new ActivityResultContracts.StartActivityForResult(), 
              new ActivityResultCallback<ActivityResult>() {
