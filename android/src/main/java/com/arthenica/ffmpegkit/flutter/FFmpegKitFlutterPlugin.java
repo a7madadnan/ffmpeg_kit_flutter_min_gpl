@@ -82,6 +82,11 @@ import java.util.Map;
  import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
  import io.flutter.plugin.common.MethodChannel.Result;
  import io.flutter.plugin.common.PluginRegistry;
+
+ import androidx.activity.ComponentActivity;
+ import androidx.activity.result.ActivityResultLauncher;
+ import androidx.activity.result.contract.ActivityResultContracts;
+
  
  public class FFmpegKitFlutterPlugin implements FlutterPlugin, ActivityAware, MethodCallHandler, EventChannel.StreamHandler {
  
@@ -706,27 +711,24 @@ import java.util.Map;
      
          this.activityPluginBinding = activityBinding;
      
-         // Cast activity to ComponentActivity to access getActivityResultRegistry()
-         if (activity instanceof androidx.activity.ComponentActivity) {
+         // ✅ Fix: Ensure ComponentActivity is imported
+         if (activity instanceof ComponentActivity) {
              ComponentActivity componentActivity = (ComponentActivity) activity;
      
              activityResultLauncher = componentActivity.registerForActivityResult(
                  new ActivityResultContracts.StartActivityForResult(),
-                 new ActivityResultCallback<ActivityResult>() {
-                     @Override
-                     public void onActivityResult(ActivityResult result) {
-                         if (result.getData() == null) return;
+                 result -> {
+                     if (result.getData() == null) return;
      
-                         // Retrieve requestCode from pending requests
-                         String key = result.getData().getAction();
-                         Integer requestCode = pendingRequests.get(key);
+                     // Handle activity result
+                     Intent data = result.getData();
+                     int resultCode = result.getResultCode();
      
+                     if (data.getAction() != null) {
+                         Integer requestCode = pendingRequests.get(data.getAction());
                          if (requestCode != null) {
-                             // Forward to existing onActivityResult() method
-                             FFmpegKitFlutterPlugin.this.onActivityResult(requestCode, result.getResultCode(), result.getData());
-     
-                             // Remove from pending requests
-                             pendingRequests.remove(key);
+                             onActivityResult(requestCode, resultCode, data);
+                             pendingRequests.remove(data.getAction());
                          }
                      }
                  }
