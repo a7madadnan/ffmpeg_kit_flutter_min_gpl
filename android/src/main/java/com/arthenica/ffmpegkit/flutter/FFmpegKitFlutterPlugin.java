@@ -153,6 +153,7 @@ import java.util.Map;
      private final FFmpegKitFlutterMethodResultHandler resultHandler;
 
      private ActivityResultLauncher<Intent> activityResultLauncher;
+     private final Map<String, Integer> pendingRequests = new HashMap<>();
 
  
      public FFmpegKitFlutterPlugin() {
@@ -703,29 +704,29 @@ import java.util.Map;
          this.activity = activity;
      
          // Register result launcher
-         activityResultLauncher = activityBinding.getActivity().registerForActivityResult(
-             new ActivityResultContracts.StartActivityForResult(),
+         activityResultLauncher = flutterPluginBinding.getActivity().getActivityResultRegistry().register(
+             "activity_result", 
+             new ActivityResultContracts.StartActivityForResult(), 
              new ActivityResultCallback<ActivityResult>() {
                  @Override
                  public void onActivityResult(ActivityResult result) {
-                     if (result.getData() == null) {
-                         return;
-                     }
-     
+                     if (result.getData() == null) return;
+         
                      // Retrieve requestCode from pending requests
-                     String key = result.getData().getAction(); // Using Intent action as the key
+                     String key = result.getData().getAction();
                      Integer requestCode = pendingRequests.get(key);
-     
+         
                      if (requestCode != null) {
-                         // Forward to existing onActivityResult
+                         // Forward to your existing onActivityResult() method
                          FFmpegKitFlutterPlugin.this.onActivityResult(requestCode, result.getResultCode(), result.getData());
-                         
+         
                          // Remove from pending requests after handling
                          pendingRequests.remove(key);
                      }
                  }
              }
          );
+
                
          Log.d("FFmpegKitFlutterPlugin", "Plugin initialized with context " + context + " and activity " + activity);
      }
@@ -734,10 +735,6 @@ import java.util.Map;
      protected void uninit() {
          uninitMethodChannel();
          uninitEventChannel();
- 
-         if (this.activityPluginBinding != null) {
-             this.activityPluginBinding.removeActivityResultListener(this);
-         }
  
          this.context = null;
          this.activity = null;
