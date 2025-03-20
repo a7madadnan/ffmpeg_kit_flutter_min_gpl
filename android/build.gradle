@@ -46,5 +46,5 @@ android {
 
 dependencies {
     implementation 'androidx.annotation:annotation:1.2.0'
-    implementation 'com.arthenica:ffmpeg-kit-min-gpl:5.1.LTS'
+    implementation 'com.arthenica:ffmpeg-kit-min-gpl:6.0-2'
 }
