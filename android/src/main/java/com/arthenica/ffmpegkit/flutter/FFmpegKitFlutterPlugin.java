@@ -141,6 +141,7 @@ public class FFmpegKitFlutterPlugin implements FlutterPlugin, ActivityAware, Met
     private FlutterPluginBinding flutterPluginBinding;
     private ActivityPluginBinding activityPluginBinding;
 
+
     private EventChannel.EventSink eventSink;
     private final FFmpegKitFlutterMethodResultHandler resultHandler;
 
@@ -202,7 +203,7 @@ public class FFmpegKitFlutterPlugin implements FlutterPlugin, ActivityAware, Met
     @Override
     public void onAttachedToActivity(ActivityPluginBinding binding) {
         this.activity = binding.getActivity();
-        this.activityBinding = binding;
+        this.activityPluginBinding = binding;
         binding.addActivityResultListener(this);
 
         Log.d(LIBRARY_NAME, String.format("FFmpegKitFlutterPlugin %s attached to activity %s.", this, activityPluginBinding.getActivity()));
@@ -213,7 +214,7 @@ public class FFmpegKitFlutterPlugin implements FlutterPlugin, ActivityAware, Met
     @Override
     public void onDetachedFromActivityForConfigChanges() {
         activity = null;
-        activityBinding = null;
+        activityPluginBinding = null;
         onDetachedFromActivity();
 
     }
@@ -221,7 +222,7 @@ public class FFmpegKitFlutterPlugin implements FlutterPlugin, ActivityAware, Met
     @Override
     public void onReattachedToActivityForConfigChanges(ActivityPluginBinding binding) {
         this.activity = binding.getActivity();
-        this.activityBinding = binding;
+        this.activityPluginBinding = binding;
         binding.addActivityResultListener(this);
 
         onAttachedToActivity(activityPluginBinding);
@@ -231,7 +232,7 @@ public class FFmpegKitFlutterPlugin implements FlutterPlugin, ActivityAware, Met
     @Override
     public void onDetachedFromActivity() {
         activity = null;
-        activityBinding = null;
+        activityPluginBinding = null;
         uninit();
         Log.d(LIBRARY_NAME, "FFmpegKitFlutterPlugin detached from activity.");
     }
