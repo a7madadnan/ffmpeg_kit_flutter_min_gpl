@@ -17,20 +17,19 @@
  * along with FFmpegKit.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'package:ffmpeg_kit_flutter/ffmpeg_kit_config.dart';
+import 'package:ffmpeg_kit_flutter/ffprobe_session.dart';
+import 'package:ffmpeg_kit_flutter/ffprobe_session_complete_callback.dart';
+import 'package:ffmpeg_kit_flutter/log_callback.dart';
+import 'package:ffmpeg_kit_flutter/media_information_session.dart';
+import 'package:ffmpeg_kit_flutter/media_information_session_complete_callback.dart';
+import 'package:ffmpeg_kit_flutter/src/ffmpeg_kit_factory.dart';
 import 'package:ffmpeg_kit_flutter_platform_interface/ffmpeg_kit_flutter_platform_interface.dart';
 import 'package:flutter/services.dart';
 
-import 'ffmpeg_kit_config.dart';
-import 'ffprobe_session.dart';
-import 'ffprobe_session_complete_callback.dart';
-import 'log_callback.dart';
-import 'media_information_session.dart';
-import 'media_information_session_complete_callback.dart';
-import 'src/ffmpeg_kit_factory.dart';
-
 /// Main class to run "FFprobe" commands.
 class FFprobeKit {
-  static FFmpegKitPlatform _platform = FFmpegKitPlatform.instance;
+  static final FFmpegKitPlatform _platform = FFmpegKitPlatform.instance;
 
   /// Synchronously executes FFprobe command provided. Space character is used
   /// to split command into arguments. You can use single or double quote
@@ -39,10 +38,8 @@ class FFprobeKit {
       FFprobeKit.executeWithArguments(FFmpegKitConfig.parseArguments(command));
 
   /// Synchronously executes FFprobe with arguments provided.
-  static Future<FFprobeSession> executeWithArguments(
-      List<String> commandArguments) async {
-    final session =
-        await FFprobeSession.create(commandArguments, null, null, null);
+  static Future<FFprobeSession> executeWithArguments(List<String> commandArguments) async {
+    final session = await FFprobeSession.create(commandArguments);
 
     await FFmpegKitConfig.ffprobeExecute(session);
 
@@ -54,24 +51,23 @@ class FFprobeKit {
   ///
   /// Note that this method returns immediately and does not wait the execution to complete. You must use an
   /// [FFprobeSessionCompleteCallback] if you want to be notified about the result.
-  static Future<FFprobeSession> executeAsync(String command,
-          [FFprobeSessionCompleteCallback? completeCallback = null,
-          LogCallback? logCallback = null]) async =>
-      FFprobeKit.executeWithArgumentsAsync(
-          FFmpegKitConfig.parseArguments(command),
-          completeCallback,
-          logCallback);
+  static Future<FFprobeSession> executeAsync(
+    String command, [
+    FFprobeSessionCompleteCallback? completeCallback,
+    LogCallback? logCallback,
+  ]) async =>
+      FFprobeKit.executeWithArgumentsAsync(FFmpegKitConfig.parseArguments(command), completeCallback, logCallback);
 
   /// Starts an asynchronous FFprobe execution with arguments provided.
   ///
   /// Note that this method returns immediately and does not wait the execution to complete. You must use an
   /// [FFprobeSessionCompleteCallback] if you want to be notified about the result.
   static Future<FFprobeSession> executeWithArgumentsAsync(
-      List<String> commandArguments,
-      [FFprobeSessionCompleteCallback? completeCallback = null,
-      LogCallback? logCallback = null]) async {
-    final session = await FFprobeSession.create(
-        commandArguments, completeCallback, logCallback, null);
+    List<String> commandArguments, [
+    FFprobeSessionCompleteCallback? completeCallback,
+    LogCallback? logCallback,
+  ]) async {
+    final session = await FFprobeSession.create(commandArguments, completeCallback, logCallback);
 
     await FFmpegKitConfig.asyncFFprobeExecute(session);
 
@@ -79,41 +75,38 @@ class FFprobeKit {
   }
 
   /// Extracts media information for the file specified with path.
-  static Future<MediaInformationSession> getMediaInformation(String path,
-      [int? waitTimeout = null]) async {
+  static Future<MediaInformationSession> getMediaInformation(String path, [int? waitTimeout]) async {
     final commandArguments = [
-      "-v",
-      "error",
-      "-hide_banner",
-      "-print_format",
-      "json",
-      "-show_format",
-      "-show_streams",
-      "-show_chapters",
-      "-i",
-      path
+      '-v',
+      'error',
+      '-hide_banner',
+      '-print_format',
+      'json',
+      '-show_format',
+      '-show_streams',
+      '-show_chapters',
+      '-i',
+      path,
     ];
-    return FFprobeKit.getMediaInformationFromCommandArguments(
-        commandArguments, waitTimeout);
+    return FFprobeKit.getMediaInformationFromCommandArguments(commandArguments, waitTimeout);
   }
 
   /// Extracts media information using the command provided. The command
   /// passed to this method must generate the output in JSON format in order to
   /// successfully extract media information from it.
   static Future<MediaInformationSession> getMediaInformationFromCommand(
-          String command,
-          [int? waitTimeout = null]) async =>
-      FFprobeKit.getMediaInformationFromCommandArguments(
-          FFmpegKitConfig.parseArguments(command), waitTimeout);
+    String command, [
+    int? waitTimeout,
+  ]) async => FFprobeKit.getMediaInformationFromCommandArguments(FFmpegKitConfig.parseArguments(command), waitTimeout);
 
   /// Extracts media information using the command arguments provided. The
   /// command passed to this method must generate the output in JSON format in
   /// order to successfully extract media information from it.
-  static Future<MediaInformationSession>
-      getMediaInformationFromCommandArguments(List<String> commandArguments,
-          [int? waitTimeout = null]) async {
-    final session =
-        await MediaInformationSession.create(commandArguments, null, null);
+  static Future<MediaInformationSession> getMediaInformationFromCommandArguments(
+    List<String> commandArguments, [
+    int? waitTimeout,
+  ]) async {
+    final session = await MediaInformationSession.create(commandArguments);
 
     await FFmpegKitConfig.getMediaInformationExecute(session, waitTimeout);
 
@@ -131,24 +124,30 @@ class FFprobeKit {
   ///
   /// Note that this method returns immediately and does not wait the execution to complete. You must use an
   /// [MediaInformationSessionCompleteCallback] if you want to be notified about the result.
-  static Future<MediaInformationSession> getMediaInformationAsync(String path,
-      [MediaInformationSessionCompleteCallback? completeCallback = null,
-      LogCallback? logCallback = null,
-      int? waitTimeout = null]) async {
+  static Future<MediaInformationSession> getMediaInformationAsync(
+    String path, [
+    MediaInformationSessionCompleteCallback? completeCallback,
+    LogCallback? logCallback,
+    int? waitTimeout,
+  ]) async {
     final commandArguments = [
-      "-v",
-      "error",
-      "-hide_banner",
-      "-print_format",
-      "json",
-      "-show_format",
-      "-show_streams",
-      "-show_chapters",
-      "-i",
-      path
+      '-v',
+      'error',
+      '-hide_banner',
+      '-print_format',
+      'json',
+      '-show_format',
+      '-show_streams',
+      '-show_chapters',
+      '-i',
+      path,
     ];
     return FFprobeKit.getMediaInformationFromCommandArgumentsAsync(
-        commandArguments, completeCallback, logCallback, waitTimeout);
+      commandArguments,
+      completeCallback,
+      logCallback,
+      waitTimeout,
+    );
   }
 
   /// Starts an asynchronous FFprobe execution to extract media information using a command. The command passed to
@@ -157,15 +156,16 @@ class FFprobeKit {
   /// Note that this method returns immediately and does not wait the execution to complete. You must use an
   /// [MediaInformationSessionCompleteCallback] if you want to be notified about the result.
   static Future<MediaInformationSession> getMediaInformationFromCommandAsync(
-          String command,
-          [MediaInformationSessionCompleteCallback? completeCallback = null,
-          LogCallback? logCallback = null,
-          int? waitTimeout = null]) async =>
-      FFprobeKit.getMediaInformationFromCommandArgumentsAsync(
-          FFmpegKitConfig.parseArguments(command),
-          completeCallback,
-          logCallback,
-          waitTimeout);
+    String command, [
+    MediaInformationSessionCompleteCallback? completeCallback,
+    LogCallback? logCallback,
+    int? waitTimeout,
+  ]) async => FFprobeKit.getMediaInformationFromCommandArgumentsAsync(
+    FFmpegKitConfig.parseArguments(command),
+    completeCallback,
+    logCallback,
+    waitTimeout,
+  );
 
   /// Starts an asynchronous FFprobe execution to extract media information
   /// using command arguments. The command passed to this method must generate
@@ -175,14 +175,13 @@ class FFprobeKit {
   /// Note that this method returns immediately and does not wait the execution
   /// to complete. You must use an [MediaInformationSessionCompleteCallback] if you want to be
   /// notified about the result.
-  static Future<MediaInformationSession>
-      getMediaInformationFromCommandArgumentsAsync(
-          List<String> commandArguments,
-          [MediaInformationSessionCompleteCallback? completeCallback = null,
-          LogCallback? logCallback = null,
-          int? waitTimeout = null]) async {
-    final session = await MediaInformationSession.create(
-        commandArguments, completeCallback, logCallback);
+  static Future<MediaInformationSession> getMediaInformationFromCommandArgumentsAsync(
+    List<String> commandArguments, [
+    MediaInformationSessionCompleteCallback? completeCallback,
+    LogCallback? logCallback,
+    int? waitTimeout,
+  ]) async {
+    final session = await MediaInformationSession.create(commandArguments, completeCallback, logCallback);
 
     await FFmpegKitConfig.asyncGetMediaInformationExecute(session, waitTimeout);
 
@@ -205,39 +204,34 @@ class FFprobeKit {
           return List.empty();
         } else {
           return sessions
-              .map((dynamic sessionObject) => FFmpegKitFactory.mapToSession(
-                  sessionObject as Map<dynamic, dynamic>))
+              .map((sessionObject) => FFmpegKitFactory.mapToSession(sessionObject as Map<dynamic, dynamic>))
               .map((session) => session as FFprobeSession)
               .toList();
         }
       });
     } on PlatformException catch (e, stack) {
-      print("Plugin listFFprobeSessions error: ${e.message}");
-      return Future.error("listFFprobeSessions failed.", stack);
+      print('Plugin listFFprobeSessions error: ${e.message}');
+      return Future.error('listFFprobeSessions failed.', stack);
     }
   }
 
   /// Lists all MediaInformation sessions in the session history.
-  static Future<List<MediaInformationSession>>
-      listMediaInformationSessions() async {
+  static Future<List<MediaInformationSession>> listMediaInformationSessions() async {
     try {
       await FFmpegKitConfig.init();
-      return _platform
-          .ffprobeKitListMediaInformationSessions()
-          .then((sessions) {
+      return _platform.ffprobeKitListMediaInformationSessions().then((sessions) {
         if (sessions == null) {
           return List.empty();
         } else {
           return sessions
-              .map((dynamic sessionObject) => FFmpegKitFactory.mapToSession(
-                  sessionObject as Map<dynamic, dynamic>))
+              .map((sessionObject) => FFmpegKitFactory.mapToSession(sessionObject as Map<dynamic, dynamic>))
               .map((session) => session as MediaInformationSession)
               .toList();
         }
       });
     } on PlatformException catch (e, stack) {
-      print("Plugin listMediaInformationSessions error: ${e.message}");
-      return Future.error("listMediaInformationSessions failed.", stack);
+      print('Plugin listMediaInformationSessions error: ${e.message}');
+      return Future.error('listMediaInformationSessions failed.', stack);
     }
   }
 }

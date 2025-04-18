@@ -17,11 +17,11 @@
  * along with FFmpegKit.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'log.dart';
-import 'log_callback.dart';
-import 'log_redirection_strategy.dart';
-import 'return_code.dart';
-import 'session_state.dart';
+import 'package:ffmpeg_kit_flutter/log.dart';
+import 'package:ffmpeg_kit_flutter/log_callback.dart';
+import 'package:ffmpeg_kit_flutter/log_redirection_strategy.dart';
+import 'package:ffmpeg_kit_flutter/return_code.dart';
+import 'package:ffmpeg_kit_flutter/session_state.dart';
 
 /// Common interface for all "FFmpegKit" sessions.
 abstract class Session {
@@ -53,7 +53,7 @@ abstract class Session {
   /// Returns all log entries generated for this session. If there are
   /// asynchronous logs that are not delivered yet, this method waits for
   /// them until [waitTimeout].
-  Future<List<Log>> getAllLogs([int? waitTimeout = null]);
+  Future<List<Log>> getAllLogs([int? waitTimeout]);
 
   /// Returns all log entries delivered for this session. Note that if there
   /// are asynchronous logs that are not delivered yet, this method
@@ -63,7 +63,7 @@ abstract class Session {
   /// Returns all log entries generated for this session as a concatenated
   /// string. If there are asynchronous logs that are not delivered yet,
   /// this method waits for them until [waitTimeout].
-  Future<String?> getAllLogsAsString([int? waitTimeout = null]);
+  Future<String?> getAllLogsAsString([int? waitTimeout]);
 
   /// Returns all log entries delivered for this session as a concatenated
   /// string. Note that if there are asynchronous logs that are not

@@ -17,7 +17,7 @@
  * along with FFmpegKit.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'ffprobe_session.dart';
+import 'package:ffmpeg_kit_flutter/ffprobe_session.dart';
 
 /// Callback function that is invoked when an asynchronous FFprobe session has
 /// ended. Session has either SessionState.completed or SessionState.failed

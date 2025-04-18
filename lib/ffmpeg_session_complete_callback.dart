@@ -17,7 +17,7 @@
  * along with FFmpegKit.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'ffmpeg_session.dart';
+import 'package:ffmpeg_kit_flutter/ffmpeg_session.dart';
 
 /// Callback function that is invoked when an asynchronous FFmpeg session has
 /// ended. Session has either SessionState.completed or SessionState.failed

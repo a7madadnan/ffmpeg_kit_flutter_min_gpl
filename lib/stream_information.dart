@@ -19,106 +19,92 @@
 
 /// Stream information class.
 class StreamInformation {
-  static const keyIndex = "index";
-  static const keyType = "codec_type";
-  static const keyCodec = "codec_name";
-  static const keyCodecLong = "codec_long_name";
-  static const keyFormat = "pix_fmt";
-  static const keyWidth = "width";
-  static const keyHeight = "height";
-  static const keyBitRate = "bit_rate";
-  static const keySampleRate = "sample_rate";
-  static const keySampleFormat = "sample_fmt";
-  static const keyChannelLayout = "channel_layout";
-  static const keySampleAspectRatio = "sample_aspect_ratio";
-  static const keyDisplayAspectRatio = "display_aspect_ratio";
-  static const keyAverageFrameRate = "avg_frame_rate";
-  static const keyRealFrameRate = "r_frame_rate";
-  static const keyTimeBase = "time_base";
-  static const keyCodecTimeBase = "codec_time_base";
-  static const keyTags = "tags";
-
-  Map<dynamic, dynamic>? _allProperties;
-
   /// Creates a new [StreamInformation] instance
   StreamInformation(this._allProperties);
+  static const keyIndex = 'index';
+  static const keyType = 'codec_type';
+  static const keyCodec = 'codec_name';
+  static const keyCodecLong = 'codec_long_name';
+  static const keyFormat = 'pix_fmt';
+  static const keyWidth = 'width';
+  static const keyHeight = 'height';
+  static const keyBitRate = 'bit_rate';
+  static const keySampleRate = 'sample_rate';
+  static const keySampleFormat = 'sample_fmt';
+  static const keyChannelLayout = 'channel_layout';
+  static const keySampleAspectRatio = 'sample_aspect_ratio';
+  static const keyDisplayAspectRatio = 'display_aspect_ratio';
+  static const keyAverageFrameRate = 'avg_frame_rate';
+  static const keyRealFrameRate = 'r_frame_rate';
+  static const keyTimeBase = 'time_base';
+  static const keyCodecTimeBase = 'codec_time_base';
+  static const keyTags = 'tags';
+
+  final Map<dynamic, dynamic>? _allProperties;
 
   /// Returns stream index.
-  int? getIndex() => this.getNumberProperty(keyIndex)?.toInt();
+  int? getIndex() => getNumberProperty(keyIndex)?.toInt();
 
   /// Returns stream type.
-  String? getType() => this.getStringProperty(StreamInformation.keyType);
+  String? getType() => getStringProperty(StreamInformation.keyType);
 
   /// Returns stream codec.
-  String? getCodec() => this.getStringProperty(StreamInformation.keyCodec);
+  String? getCodec() => getStringProperty(StreamInformation.keyCodec);
 
   /// Returns stream codec in long format.
-  String? getFullCodec() =>
-      this.getStringProperty(StreamInformation.keyCodecLong);
+  String? getCodecLong() => getStringProperty(StreamInformation.keyCodecLong);
 
   /// Returns stream format.
-  String? getFormat() => this.getStringProperty(StreamInformation.keyFormat);
+  String? getFormat() => getStringProperty(StreamInformation.keyFormat);
 
   /// Returns width.
-  int? getWidth() =>
-      this.getNumberProperty(StreamInformation.keyWidth)?.toInt();
+  int? getWidth() => getNumberProperty(StreamInformation.keyWidth)?.toInt();
 
   /// Returns height.
-  int? getHeight() =>
-      this.getNumberProperty(StreamInformation.keyHeight)?.toInt();
+  int? getHeight() => getNumberProperty(StreamInformation.keyHeight)?.toInt();
 
   /// Returns bitrate.
-  String? getBitrate() => this.getStringProperty(StreamInformation.keyBitRate);
+  String? getBitrate() => getStringProperty(StreamInformation.keyBitRate);
 
   /// Returns sample rate.
-  String? getSampleRate() =>
-      this.getStringProperty(StreamInformation.keySampleRate);
+  String? getSampleRate() => getStringProperty(StreamInformation.keySampleRate);
 
   /// Returns sample format.
-  String? getSampleFormat() =>
-      this.getStringProperty(StreamInformation.keySampleFormat);
+  String? getSampleFormat() => getStringProperty(StreamInformation.keySampleFormat);
 
   /// Returns channel layout.
-  String? getChannelLayout() =>
-      this.getStringProperty(StreamInformation.keyChannelLayout);
+  String? getChannelLayout() => getStringProperty(StreamInformation.keyChannelLayout);
 
   /// Returns sample aspect ratio.
-  String? getSampleAspectRatio() =>
-      this.getStringProperty(StreamInformation.keySampleAspectRatio);
+  String? getSampleAspectRatio() => getStringProperty(StreamInformation.keySampleAspectRatio);
 
   /// Returns display aspect ratio.
-  String? getDisplayAspectRatio() =>
-      this.getStringProperty(StreamInformation.keyDisplayAspectRatio);
+  String? getDisplayAspectRatio() => getStringProperty(StreamInformation.keyDisplayAspectRatio);
 
   /// Returns average frame rate.
-  String? getAverageFrameRate() =>
-      this.getStringProperty(StreamInformation.keyAverageFrameRate);
+  String? getAverageFrameRate() => getStringProperty(StreamInformation.keyAverageFrameRate);
 
   /// Returns real frame rate.
-  String? getRealFrameRate() =>
-      this.getStringProperty(StreamInformation.keyRealFrameRate);
+  String? getRealFrameRate() => getStringProperty(StreamInformation.keyRealFrameRate);
 
   /// Returns time base.
-  String? getTimeBase() =>
-      this.getStringProperty(StreamInformation.keyTimeBase);
+  String? getTimeBase() => getStringProperty(StreamInformation.keyTimeBase);
 
   /// Returns codec time base.
-  String? getCodecTimeBase() =>
-      this.getStringProperty(StreamInformation.keyCodecTimeBase);
+  String? getCodecTimeBase() => getStringProperty(StreamInformation.keyCodecTimeBase);
 
   /// Returns all tags.
-  Map<dynamic, dynamic>? getTags() =>
-      this.getProperty(StreamInformation.keyTags);
+  Map<dynamic, dynamic>? getTags() => getProperty(StreamInformation.keyTags) as Map<dynamic, dynamic>?;
 
   /// Returns the stream property associated with the key.
-  String? getStringProperty(String key) => this._allProperties?[key];
+  String? getStringProperty(String key) => _allProperties?[key] as String?;
 
   /// Returns the stream property associated with the key.
-  num? getNumberProperty(String key) => this._allProperties?[key];
+  num? getNumberProperty(String key) => _allProperties?[key] as num?;
 
   /// Returns the stream property associated with the key.
-  dynamic getProperty(String key) => this._allProperties?[key];
+  dynamic getProperty(String key) => _allProperties?[key];
 
   /// Returns all properties found.
-  Map<dynamic, dynamic>? getAllProperties() => this._allProperties;
+  Map<dynamic, dynamic>? getAllProperties() => _allProperties;
 }

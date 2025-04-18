@@ -17,14 +17,13 @@
  * along with FFmpegKit.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'package:ffmpeg_kit_flutter/ffmpeg_kit_config.dart';
 import 'package:ffmpeg_kit_flutter_platform_interface/ffmpeg_kit_flutter_platform_interface.dart';
 import 'package:flutter/services.dart';
 
-import 'ffmpeg_kit_config.dart';
-
 /// Detects the running architecture.
 class ArchDetect {
-  static FFmpegKitPlatform _platform = FFmpegKitPlatform.instance;
+  static final FFmpegKitPlatform _platform = FFmpegKitPlatform.instance;
 
   /// Returns architecture name loaded.
   static Future<String> getArch() async {
@@ -32,8 +31,8 @@ class ArchDetect {
       await FFmpegKitConfig.init();
       return _platform.archDetectGetArch();
     } on PlatformException catch (e, stack) {
-      print("Plugin getArch error: ${e.message}");
-      return Future.error("getArch failed.", stack);
+      print('Plugin getArch error: ${e.message}');
+      return Future.error('getArch failed.', stack);
     }
   }
 }

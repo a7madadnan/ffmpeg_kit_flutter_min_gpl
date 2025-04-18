@@ -17,11 +17,11 @@
  * along with FFmpegKit.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'abstract_session.dart';
-import 'log_callback.dart';
-import 'media_information.dart';
-import 'media_information_session_complete_callback.dart';
-import 'src/ffmpeg_kit_factory.dart';
+import 'package:ffmpeg_kit_flutter/abstract_session.dart';
+import 'package:ffmpeg_kit_flutter/log_callback.dart';
+import 'package:ffmpeg_kit_flutter/media_information.dart';
+import 'package:ffmpeg_kit_flutter/media_information_session_complete_callback.dart';
+import 'package:ffmpeg_kit_flutter/src/ffmpeg_kit_factory.dart';
 
 /// A custom FFprobe session, which produces a "MediaInformation" object
 /// using the FFprobe output.
@@ -29,36 +29,38 @@ class MediaInformationSession extends AbstractSession {
   MediaInformation? _mediaInformation;
 
   /// Creates a new MediaInformation session with [argumentsArray].
-  static Future<MediaInformationSession> create(List<String> argumentsArray,
-      [MediaInformationSessionCompleteCallback? completeCallback = null,
-      LogCallback? logCallback = null]) async {
-    final session =
-        await AbstractSession.createMediaInformationSession(argumentsArray);
+  static Future<MediaInformationSession> create(
+    List<String> argumentsArray, [
+    MediaInformationSessionCompleteCallback? completeCallback,
+    LogCallback? logCallback,
+  ]) async {
+    final session = await AbstractSession.createMediaInformationSession(argumentsArray);
     final sessionId = session.getSessionId();
 
-    FFmpegKitFactory.setMediaInformationSessionCompleteCallback(
-        sessionId, completeCallback);
+    FFmpegKitFactory.setMediaInformationSessionCompleteCallback(sessionId, completeCallback);
     FFmpegKitFactory.setLogCallback(sessionId, logCallback);
 
     return session;
   }
 
   /// Returns the media information extracted in this session.
-  MediaInformation? getMediaInformation() => this._mediaInformation;
+  MediaInformation? getMediaInformation() => _mediaInformation;
 
   /// Sets the media information extracted in this session.
   void setMediaInformation(MediaInformation? mediaInformation) {
-    this._mediaInformation = mediaInformation;
+    _mediaInformation = mediaInformation;
   }
 
   /// Returns the session specific complete callback.
   MediaInformationSessionCompleteCallback? getCompleteCallback() =>
-      FFmpegKitFactory.getMediaInformationSessionCompleteCallback(
-          this.getSessionId());
+      FFmpegKitFactory.getMediaInformationSessionCompleteCallback(getSessionId());
 
+  @override
   bool isFFmpeg() => false;
 
+  @override
   bool isFFprobe() => false;
 
+  @override
   bool isMediaInformation() => true;
 }

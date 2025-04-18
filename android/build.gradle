@@ -1,34 +1,41 @@
+group = "com.arthenica.ffmpegkit.flutter"
+version = "1.0-SNAPSHOT"
+
 buildscript {
+    ext.kotlin_version = "2.1.10"
     repositories {
         google()
         mavenCentral()
-        maven { url "https://repo.arthenica.com/releases" }
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.1.2'
+        classpath("com.android.tools.build:gradle:8.7.0")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version")
     }
 }
 
-rootProject.allprojects {
+allprojects {
     repositories {
         google()
         mavenCentral()
     }
 }
 
-apply plugin: 'com.android.library'
+apply plugin: "com.android.library"
+apply plugin: "kotlin-android"
 
 android {
-    namespace 'com.arthenica.ffmpegkit.flutter'
+    namespace = "com.arthenica.ffmpegkit.flutter"
 
-    compileSdkVersion 31
+    compileSdk = 35
 
-    defaultConfig {
-        minSdkVersion 16
-        targetSdkVersion 31
-        versionCode 510
-        versionName "5.1.0"
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_17
     }
 
     buildTypes {
@@ -36,16 +43,19 @@ android {
             minifyEnabled false
         }
     }
-    lintOptions {
-        disable 'GradleCompatible'
-    }
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
-}
 
-dependencies {
-    implementation 'androidx.annotation:annotation:1.2.0'
-    implementation 'com.arthenica:ffmpeg-kit-min-gpl:6.0-2'
+    sourceSets {
+        main.java.srcDirs += "src/main/kotlin"
+    }
+
+    defaultConfig {
+        minSdk = 24
+        versionCode 603
+        versionName "6.0.3"
+    }
+
+    dependencies {
+        implementation("androidx.annotation:annotation:1.9.1")
+        implementation("com.arthenica:ffmpeg-kit-https:6.0-2.LTS")
+    }
 }

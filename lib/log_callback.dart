@@ -17,7 +17,7 @@
  * along with FFmpegKit.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'log.dart';
+import 'package:ffmpeg_kit_flutter/log.dart';
 
 /// Callback function that receives logs generated for "FFmpegKit" sessions.
 typedef LogCallback = void Function(Log log);

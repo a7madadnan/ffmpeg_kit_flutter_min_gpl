@@ -17,7 +17,7 @@
  * along with FFmpegKit.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'media_information_session.dart';
+import 'package:ffmpeg_kit_flutter/media_information_session.dart';
 
 /// Callback function that is invoked when an asynchronous MediaInformation
 /// session has ended. Session has either SessionState.completed or
@@ -26,5 +26,4 @@ import 'media_information_session.dart';
 /// see the execution result.
 /// If "getState" returns SessionState.failed then "getFailStackTrace" should
 /// be used to get the failure reason.
-typedef MediaInformationSessionCompleteCallback = void Function(
-    MediaInformationSession session);
+typedef MediaInformationSessionCompleteCallback = void Function(MediaInformationSession session);

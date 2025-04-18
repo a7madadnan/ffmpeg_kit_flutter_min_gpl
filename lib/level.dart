@@ -59,26 +59,26 @@ class Level {
   static String levelToString(int level) {
     switch (level) {
       case Level.avLogTrace:
-        return "TRACE";
+        return 'TRACE';
       case Level.avLogDebug:
-        return "DEBUG";
+        return 'DEBUG';
       case Level.avLogVerbose:
-        return "VERBOSE";
+        return 'VERBOSE';
       case Level.avLogInfo:
-        return "INFO";
+        return 'INFO';
       case Level.avLogWarning:
-        return "WARNING";
+        return 'WARNING';
       case Level.avLogError:
-        return "ERROR";
+        return 'ERROR';
       case Level.avLogFatal:
-        return "FATAL";
+        return 'FATAL';
       case Level.avLogPanic:
-        return "PANIC";
+        return 'PANIC';
       case Level.avLogStderr:
-        return "STDERR";
+        return 'STDERR';
       case Level.avLogQuiet:
       default:
-        return "";
+        return '';
     }
   }
 }

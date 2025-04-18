@@ -19,11 +19,11 @@
 
 /// Log entry for an FFmpegKit session.
 class Log {
-  int _sessionId;
-  int _level;
-  String _message;
 
   Log(this._sessionId, this._level, this._message);
+  final int _sessionId;
+  final int _level;
+  final String _message;
 
   int getSessionId() => _sessionId;
 

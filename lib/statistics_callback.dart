@@ -17,7 +17,7 @@
  * along with FFmpegKit.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'statistics.dart';
+import 'package:ffmpeg_kit_flutter/statistics.dart';
 
 /// Callback function that receives statistics generated for "FFmpeg" sessions.
 typedef StatisticsCallback = void Function(Statistics statistics);

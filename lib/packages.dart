@@ -17,14 +17,13 @@
  * along with FFmpegKit.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'package:ffmpeg_kit_flutter/ffmpeg_kit_config.dart';
 import 'package:ffmpeg_kit_flutter_platform_interface/ffmpeg_kit_flutter_platform_interface.dart';
 import 'package:flutter/services.dart';
 
-import 'ffmpeg_kit_config.dart';
-
 /// Helper class to extract binary package information.
 class Packages {
-  static FFmpegKitPlatform _platform = FFmpegKitPlatform.instance;
+  static final FFmpegKitPlatform _platform = FFmpegKitPlatform.instance;
 
   /// Returns the FFmpegKit Flutter binary package name.
   static Future<String?> getPackageName() async {
@@ -32,8 +31,8 @@ class Packages {
       await FFmpegKitConfig.init();
       return _platform.getPackageName();
     } on PlatformException catch (e, stack) {
-      print("Plugin getPackageName error: ${e.message}");
-      return Future.error("getPackageName failed.", stack);
+      print('Plugin getPackageName error: ${e.message}');
+      return Future.error('getPackageName failed.', stack);
     }
   }
 
@@ -49,8 +48,8 @@ class Packages {
         }
       });
     } on PlatformException catch (e, stack) {
-      print("Plugin getExternalLibraries error: ${e.message}");
-      return Future.error("getExternalLibraries failed.", stack);
+      print('Plugin getExternalLibraries error: ${e.message}');
+      return Future.error('getExternalLibraries failed.', stack);
     }
   }
 }
